@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Entry</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" href="https://7801165.app.netsuite.com/core/media/media.nl?id=108605&c=7801165&h=a8b1OZYCY78l7yHBQ4tLkLo-a7hPL-e2jgjD2yc2ZBElLmxN">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="custom-form-container"></div>
+  <script>
+    (function () {
+      var containerId = 'custom-form-container';
+      var container = document.getElementById(containerId);
+
+      if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        document.body.insertBefore(container, document.body.firstChild);
+      }
+
+      var logoUrl = 'https://7801165.app.netsuite.com/core/media/media.nl?id=108605&c=7801165&h=a8b1OZYCY78l7yHBQ4tLkLo-a7hPL-e2jgjD2yc2ZBElLmxN';
+      var userName = localStorage.getItem('userName');
+      var userRole = localStorage.getItem('userRole');
+
+      if (!userName || !userRole) {
+        setTimeout(function () {
+          var name = prompt('Please enter your name:');
+          var role = prompt('Please enter your role:');
+          if (name && role) {
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userRole', role);
+            location.reload();
+          } else {
+            alert('Both fields are required.');
+          }
+        }, 100);
+        return;
+      }
+
+      container.innerHTML = '';
+
+      var header = document.createElement('div');
+      header.style.textAlign = 'center';
+      header.innerHTML =
+        '<img src="' + logoUrl + '" alt="Logo" style="max-height: 80px;"><br>' +
+        '<p style="font-size:16px; font-weight: bold;">Welcome, ' + userName + ' (' + userRole + ')</p>';
+      container.appendChild(header);
+
+      var clearBtn = document.createElement('button');
+      clearBtn.textContent = 'Reset User Info';
+      clearBtn.onclick = function (e) {
+        e.preventDefault();
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userRole');
+        location.reload();
+      };
+      container.appendChild(clearBtn);
+
+      var form = document.createElement('form');
+      form.id = 'data-entry-form';
+      form.style.marginTop = '20px';
+
+      function createInputField(type, id, labelText) {
+        var label = document.createElement('label');
+        label.textContent = labelText;
+        label.setAttribute('for', id);
+        form.appendChild(label);
+        form.appendChild(document.createElement('br'));
+
+        var input = document.createElement('input');
+        input.type = type;
+        input.id = id;
+        input.name = id;
+        form.appendChild(input);
+        form.appendChild(document.createElement('br'));
+      }
+
+      function createSelectField(id, labelText, options) {
+        var label = document.createElement('label');
+        label.textContent = labelText;
+        label.setAttribute('for', id);
+        form.appendChild(label);
+        form.appendChild(document.createElement('br'));
+
+        var select = document.createElement('select');
+        select.id = id;
+        select.name = id;
+        options.forEach(function (val) {
+          var opt = document.createElement('option');
+          opt.value = val;
+          opt.textContent = val;
+          select.appendChild(opt);
+        });
+        form.appendChild(select);
+        form.appendChild(document.createElement('br'));
+      }
+
+      function createTextarea(id, labelText) {
+        var label = document.createElement('label');
+        label.textContent = labelText;
+        label.setAttribute('for', id);
+        form.appendChild(label);
+        form.appendChild(document.createElement('br'));
+
+        var textarea = document.createElement('textarea');
+        textarea.id = id;
+        textarea.name = id;
+        textarea.rows = 4;
+        textarea.cols = 50;
+        form.appendChild(textarea);
+        form.appendChild(document.createElement('br'));
+      }
+
+      createSelectField('aircraftRegistration', 'Aircraft Registration', [
+        'VH-XA2', 'VH-ZKG', 'VH-ZKA', 'VH-CFL', 'VH-HFX', 'VH-XA5', 'VH-XA3', 'VH-XA4',
+        'PS-FAK', 'C-GGRD', 'C-FXAZ', 'ZS-UMB', 'N2343X', 'N5366X', 'N695LC', 'N3394X',
+        'N869XA', 'HK-5429', 'HK-5195', 'ZS-XAJ', 'ZS-XAG', 'ZS-XAR', 'ZS-XAZ', 'ZS-XAY',
+        'ZS-XAW', 'ZS-XAV', 'ZS-XAL', 'ZS-XAC', 'ZS-XAS', 'ZS-XAP', 'ZS-PHG', 'ZS-GCO',
+        'ZS-ABJ', 'ZS-XPA', 'ZS-ABP', 'ZS-ABO', 'ZS-XCA', 'ZS-XKA', 'ZS-XKB'
+      ]);
+
+      createSelectField('systemName', 'System Name', [
+        'EINSTEIN', 'GALILEO', 'NEWTON', 'KEPLER', 'CAVENDISH', 'FYENMAN',
+        'TEMPEST 1', 'TEMPEST 2', 'TEMPEST 3', 'TEMPEST 4', 'TEMPEST 5',
+        'TEMPEST 6', 'TEMPEST 7', 'TEMPEST 8', 'TEMPEST 9',
+        'HELITEM1', 'HELITEM2', 'HELITEM3', 'HELITEM4', 'HELITEM5',
+        'HELITEM6', 'HELITEM7', 'HELITEM8', 'HELITEM9', 'HELITEM10',
+        'HELITEM11', 'HELITEM12', 'HELITEM13', 'HELITEM14', 'HELITEM15'
+      ]);
+
+      createInputField('text', 'location', 'Location');
+      createInputField('text', 'projectNumber', 'Project Number');
+      createInputField('date', 'flightDate', 'Date');
+      createInputField('text', 'flightNumber', 'Flight Number');
+      createInputField('number', 'flightDuration', 'Flight Duration (hrs)');
+      createInputField('number', 'fuelUplift', 'Fuel Uplift (L)');
+      createInputField('number', 'estimatedKm', 'Estimated km Flown');
+      createInputField('number', 'acceptedKm', 'Accepted Line km');
+      createTextarea('safetyComment', 'Safety Comment');
+      createTextarea('clientComments', 'Client Comments');
+
+      container.appendChild(form);
+    })();
+  </script>
+</body>
+</html>
